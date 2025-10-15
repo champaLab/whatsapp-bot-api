@@ -4,8 +4,43 @@ FROM node:22-slim AS base
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt update -y && apt install -y iputils-ping telnet && rm -rf /var/lib/apt/lists/*
+# Install system dependencies including Chrome/Puppeteer requirements
+RUN apt update -y && apt install -y \
+    iputils-ping \
+    telnet \
+    wget \
+    gnupg \
+    ca-certificates \
+    fonts-liberation \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libatspi2.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libdrm2 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libxss1 \
+    libxtst6 \
+    xdg-utils \
+    libglib2.0-0 \
+    libnss3-dev \
+    libatk-bridge2.0-dev \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    libxss1 \
+    libasound2 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install PM2 globally
 RUN yarn global add pm2
