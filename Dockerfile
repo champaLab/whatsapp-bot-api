@@ -1,5 +1,5 @@
 # Multi-stage build for better optimization
-FROM node:20-slim AS base
+FROM node:22-slim AS base
 
 # Set working directory
 WORKDIR /app
