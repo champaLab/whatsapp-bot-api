@@ -4,7 +4,7 @@ const hostname = os.hostname()  // Get the hostname once and store it in a varia
 module.exports = {
   apps: [
     {
-      name: 'easy-pos-api',
+      name: 'whatsapp-bot',
       script: './dist/index.js',
       instances: 1,
       autorestart: true,

@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: easy-post-api-config
+  name: whatsapp-bot-api-config
   namespace: prod
 data:
   NODE_ENV: "production"

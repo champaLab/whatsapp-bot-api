@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: easy-pos-api
+  name: whatsapp-bot-api
   namespace: prod
   labels:
-    app: easy-pos-api
+    app: whatsapp-bot-api
 spec:
   selector:
     matchLabels:
-      app: easy-pos-api
+      app: whatsapp-bot-api
   replicas: 1
   strategy:
     rollingUpdate:
@@ -18,13 +18,13 @@ spec:
   template:
     metadata:
       labels:
-        app: easy-pos-api
+        app: whatsapp-bot-api
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-        - name: easy-pos-api
-          image: ghcr.io/champalab/easy-pos-api:976369cd55d5b91fabdfd2eaffb275a720a1565e
+        - name: whatsapp-bot-api
+          image: ghcr.io/champalab/whatsapp-bot-api:976369cd55d5b91fabdfd2eaffb275a720a1565e
           imagePullPolicy: Always
           resources:
             requests:
