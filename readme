@@ -1,0 +1,11 @@
+openssl genrsa -out private.pem 4096
+openssl rsa -in private.pem -pubout > public.pem
+
+CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT, UPDATE, DELETE ON database_name.* TO 'username'@'%';
+FLUSH PRIVILEGES;
+
+
+rm -rf node_modules yarn.lock
+npx npm-check-updates -u
+yarn install

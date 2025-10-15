@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: easy-pos-api
+  namespace: prod
+  labels:
+    app: easy-pos-api
+spec:
+  selector:
+    matchLabels:
+      app: easy-pos-api
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: easy-pos-api
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: easy-pos-api
+          image: ghcr.io/champalab/easy-pos-api:976369cd55d5b91fabdfd2eaffb275a720a1565e
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 500m
+              memory: 100Mi
+            limits:
+              cpu: 2000m
+              memory: 2048Mi
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: easy-post-api-config
+            # - secretRef:
+            #     name: database-easy-pos
+            # - secretRef:
+            #     name: jwt-secret
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: vol-easy-pos
+              mountPath: /app/logs
+              subPath: vol-easy-pos/logs
+            - name: vol-easy-pos
+              mountPath: /app/uploads
+              subPath: vol-easy-pos/uploads
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Bangkok
+        - name: vol-easy-pos
+          nfs:
+            path: /mnt/gfs
+            server: gfs-01
+      restartPolicy: Always

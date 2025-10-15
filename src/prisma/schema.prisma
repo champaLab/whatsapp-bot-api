@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("PRISMA_DB_CONN")
+}
+
+model expense {
+  id            Int          @id @unique(map: "expense_pk_2") @default(autoincrement())
+  title         String       @db.VarChar(255)
+  description   String?      @db.VarChar(255)
+  amount        Float
+  note          String?      @db.Text
+  expenseTypeId Int
+  shopId        Int          @default(1)
+  expenseDate   DateTime?    @db.Date
+  createdAt     DateTime?    @default(now()) @db.DateTime(0)
+  updatedAt     DateTime?    @db.DateTime(0)
+  deletedAt     DateTime?    @db.DateTime(0)
+  expense_type  expense_type @relation(fields: [expenseTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expense_expense_type_id_fk")
+  shop          shop         @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expense_shop_id_fk")
+
+  @@index([expenseTypeId], map: "expense_expense_type_id_fk")
+  @@index([shopId], map: "expense_shop_id_fk")
+}
+
+model expense_type {
+  id          Int       @id @unique(map: "expense_type_pk_2") @default(autoincrement())
+  typeName    String    @unique(map: "expense_type_pk_3") @db.VarChar(255)
+  description String?   @db.Text
+  indexNo     Int?      @default(1)
+  shopId      Int?
+  createdAt   DateTime? @default(now()) @db.DateTime(0)
+  updatedAt   DateTime? @db.DateTime(0)
+  deletedAt   DateTime? @db.DateTime(0)
+  expense     expense[]
+  shop        shop?     @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "expense_type_shop_id_fk")
+
+  @@index([shopId], map: "expense_type_shop_id_fk")
+}
+
+model invoice_items {
+  id          Int       @id @unique(map: "invoice_items_pk") @default(autoincrement())
+  barcode     String    @db.VarChar(255)
+  invoiceUuid String?   @db.VarChar(200)
+  uuid        String?   @unique(map: "invoice_items_pk_2") @db.VarChar(255)
+  invoiceId   Int?
+  productId   Int
+  quantity    Int
+  price       Decimal   @db.Decimal(10, 2)
+  userId      Int
+  shopId      Int
+  createdAt   DateTime? @db.DateTime(0)
+  printDate   DateTime? @db.DateTime(0)
+  updatedAt   DateTime? @db.DateTime(0)
+  deletedAt   DateTime? @db.DateTime(0)
+  user        user      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoice_items_ibfk_1")
+  invoices    invoices? @relation(fields: [invoiceId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoice_items_ibfk_2")
+  products    products  @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoice_items_ibfk_3")
+  shop        shop      @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "invoice_items_ibfk_4")
+
+  @@index([invoiceId], map: "invoice_items_invoices_id_fk")
+  @@index([productId], map: "invoice_items_products_id_fk")
+  @@index([shopId], map: "invoice_items_shop_id_fk")
+  @@index([userId], map: "invoice_items_user_id_fk")
+}
+
+model invoices {
+  id             Int                     @id @unique(map: "invoices_pk") @default(autoincrement())
+  shopId         Int
+  barcode        String?                 @db.VarChar(200)
+  invoiceUuid    String                  @unique(map: "invoices_pk_2") @db.VarChar(250)
+  status         String                  @default("UNPAID") @db.VarChar(50)
+  userId         Int
+  changeAmount   Decimal?                @default(0) @db.Decimal(10, 0)
+  referenceNo    String?                 @db.VarChar(200)
+  transferAmount Decimal?                @default(0) @db.Decimal(10, 0)
+  cashAmount     Decimal?                @default(0) @db.Decimal(10, 0)
+  vat            Int                     @default(0)
+  totalAmount    Decimal                 @db.Decimal(10, 2)
+  paidTotal      Decimal                 @default(0.00) @db.Decimal(10, 2)
+  paymentMethod  invoices_paymentMethod? @default(CASH)
+  printDate      DateTime?               @db.DateTime(0)
+  deviceId       String?                 @db.VarChar(100)
+  createdAt      DateTime                @db.DateTime(0)
+  deletedAt      DateTime?               @db.DateTime(0)
+  deletedBy      Int?
+  invoice_items  invoice_items[]
+}
+
+model message_queue {
+  id        Int                  @id @unique(map: "message_queue_pk_2") @default(autoincrement())
+  chatId    String               @db.VarChar(100)
+  message   String               @db.Text
+  path      String?              @db.VarChar(200)
+  status    message_queue_status @default(PENDING)
+  priority  Int?                 @default(0)
+  createdAt DateTime?            @default(now()) @db.DateTime(0)
+  updatedAt DateTime?            @db.DateTime(0)
+}
+
+model product_types {
+  id        Int        @id @unique(map: "product_types_pk_2") @default(autoincrement())
+  indexNo   Int?       @default(0)
+  typeName  String     @db.VarChar(200)
+  shopId    Int
+  createdAt DateTime?  @default(dbgenerated("(now())")) @db.DateTime(0)
+  updatedAt DateTime?  @db.DateTime(0)
+  deletedAt DateTime?  @db.DateTime(0)
+  shop      shop       @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "product_types_ibfk_1")
+  products  products[]
+
+  @@index([shopId], map: "product_types_shop_id_fk")
+}
+
+model products {
+  id            Int             @id @default(autoincrement())
+  image         String?         @db.VarChar(255)
+  barcode       String?         @db.VarChar(150)
+  name          String          @db.VarChar(255)
+  description   String?         @db.Text
+  priceBuy      Int             @default(0)
+  priceSale     Int?            @default(0)
+  stockQuantity Int             @default(0)
+  productTypeId Int
+  shopId        Int
+  createdAt     DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime?       @db.Timestamp(0)
+  deletedAt     DateTime?       @db.DateTime(0)
+  deletedBy     Int?
+  invoice_items invoice_items[]
+  product_types product_types   @relation(fields: [productTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "products_product_types_id_fk")
+
+  @@index([productTypeId], map: "products_product_types_id_fk")
+}
+
+model shop {
+  id               Int                @id @unique(map: "shop_pk") @default(autoincrement())
+  name             String             @db.VarChar(255)
+  address          String             @db.Text
+  openTime         DateTime           @db.Time(0)
+  closeTime        DateTime           @db.Time(0)
+  phone            String?            @db.VarChar(8)
+  logo             String?            @db.VarChar(255)
+  comment          String?            @db.Text
+  shopGroup        String?            @db.VarChar(100)
+  status           shop_status        @default(ACTIVE)
+  isMultiCart      Boolean            @default(false)
+  vatRate          Int                @default(0)
+  longitude        String?            @db.VarChar(40)
+  latitude         String?            @db.VarChar(40)
+  expireDate       DateTime?          @db.Date
+  createdAt        DateTime           @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime?          @db.DateTime(0)
+  deletedAt        DateTime?          @db.DateTime(0)
+  isVerify         DateTime?          @db.DateTime(0)
+  expense          expense[]
+  expense_type     expense_type[]
+  invoice_items    invoice_items[]
+  product_types    product_types[]
+  user             user[]
+  user_shop_access user_shop_access[]
+}
+
+model user {
+  id               Int                @id @unique(map: "user_pk") @default(autoincrement())
+  name             String             @db.VarChar(255)
+  phone            String             @db.VarChar(8)
+  password         String             @db.VarChar(255)
+  status           Boolean            @default(true)
+  role             user_role          @default(EMPLOYEE)
+  shopId           Int
+  createdAt        DateTime           @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime?          @db.DateTime(0)
+  deletedAt        DateTime?          @db.DateTime(0)
+  deletedBy        Int?
+  invoice_items    invoice_items[]
+  user             user?              @relation("userTouser", fields: [deletedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_ibfk_1")
+  other_user       user[]             @relation("userTouser")
+  shop             shop               @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_ibfk_2")
+  user_shop_access user_shop_access[]
+
+  @@index([shopId], map: "user_shop_id_fk")
+  @@index([deletedBy], map: "user_user_id_fk")
+}
+
+model user_shop_access {
+  id        Int       @id @unique(map: "user_shop_access_pk_2") @default(autoincrement())
+  userId    Int
+  shopId    Int
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @db.DateTime(0)
+  deletedAt DateTime? @db.DateTime(0)
+  shop      shop      @relation(fields: [shopId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_shop_access_shop_id_fk")
+  user      user      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_shop_access_user_id_fk")
+
+  @@index([shopId], map: "user_shop_access_shop_id_fk")
+  @@index([userId], map: "user_shop_access_user_id_fk")
+}
+
+model verify_code {
+  id        Int       @id @unique(map: "verify_code_pk_2") @default(autoincrement())
+  phone     String?   @db.VarChar(10)
+  code      String    @db.VarChar(8)
+  ip        String?   @db.VarChar(200)
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @db.DateTime(0)
+}
+
+model carts {
+  id        Int       @id @unique(map: "carts_pk_2") @default(autoincrement())
+  name      String    @db.VarChar(200)
+  shopId    Int
+  uuid      String?   @db.VarChar(255)
+  createdAt DateTime  @default(dbgenerated("(curtime())")) @db.DateTime(0)
+  updatedAt DateTime? @db.DateTime(0)
+}
+
+enum message_queue_status {
+  SENT
+  PENDING
+  CANCEL
+}
+
+enum user_role {
+  ADMIN
+  OWNER
+  MANAGER
+  EMPLOYEE
+}
+
+enum shop_status {
+  ACTIVE
+  INACTIVE
+  TERMINATE
+}
+
+enum invoices_paymentMethod {
+  CASH
+  TRANSFER
+  MIXED
+}
