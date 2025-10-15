@@ -62,17 +62,20 @@ spec:
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
-            - name: vol-easy-pos
+            - name: whatsapp-bot-api
               mountPath: /app/logs
-              subPath: vol-easy-pos/logs
-            - name: vol-easy-pos
+              subPath: whatsapp-bot-api/logs
+            - name: whatsapp-bot-api
               mountPath: /app/uploads
-              subPath: vol-easy-pos/uploads
+              subPath: whatsapp-bot-api/uploads
+            - name: whatsapp-bot-api
+              mountPath: /app/whatsapp-sessions
+              subPath: whatsapp-bot-api/whatsapp-sessions
       volumes:
         - name: localtime
           hostPath:
             path: /usr/share/zoneinfo/Asia/Bangkok
-        - name: vol-easy-pos
+        - name: whatsapp-bot-api
           nfs:
             path: /mnt/gfs
             server: gfs-01

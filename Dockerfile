@@ -59,7 +59,6 @@ FROM dependencies AS builder
 
 # Copy source code
 COPY . .
-COPY ecosystem.config.js ./ecosystem.config.js
 
 # Copy the production .env file
 # COPY .env.prod .env
