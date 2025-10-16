@@ -32,6 +32,7 @@ export default {
     ROW_PER_PAGE: Number(`${process.env.ROW_PER_PAGE ?? 25}`),
     TELEGRAM_BOT_TOKEN: `${process.env.TELEGRAM_BOT_TOKEN}`,
     TELEGRAM_CHAT_ID: `${process.env.TELEGRAM_CHAT_ID}`,
-    NTBA_FIX_350: process.env.NTBA_FIX_350 === 'true'
+    NTBA_FIX_350: process.env.NTBA_FIX_350 === 'true',
+    API_KEY: `${process.env.API_KEY}`
 
 }

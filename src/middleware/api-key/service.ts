@@ -1,3 +1,5 @@
+import env from "../../env"
+
 export async function checkApiKeyService(apiKey: string) {
     // const sql = `
     //       SELECT apiKey, expiredAt, status, expiredAt, description
@@ -12,7 +14,7 @@ export async function checkApiKeyService(apiKey: string) {
         // return wrappedRow
         const apiKeys = [
             {
-                apiKey: 'pHknO3TC/1UlaOUH6xEDt7YxmmyaYJ7r',
+                apiKey: env.API_KEY,
                 expiredAt: Date.now(),
                 status: true,
                 description: ''

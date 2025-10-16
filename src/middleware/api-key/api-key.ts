@@ -3,8 +3,8 @@ import { checkApiKeyService } from './service'
 import dayjs from 'dayjs'
 
 export const checkApiKey = async (req: Request, res: Response, next: NextFunction) => {
-    const apiKey = req.headers['lpk-api-key'] as string
-    console.log({ apiKey })
+    const apiKey = req.headers['x-api-key'] as string
+    // console.log({ apiKey })
 
     if (!apiKey) {
         res.status(401).json({ status: 'error', message: 'Missing API key' })
