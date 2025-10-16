@@ -116,12 +116,12 @@ export class WhatsAppService {
         // Remove all non-digit characters
         let cleaned = phoneNumber.replace(/\D/g, '');
 
-        // Add country code if not present (assuming +856 for Laos)
-        if (cleaned.startsWith('0')) {
-            cleaned = '856' + cleaned.substring(1);
-        } else if (!cleaned.startsWith('856')) {
-            cleaned = '856' + cleaned;
-        }
+        // // Add country code if not present (assuming +856 for Laos)
+        // if (cleaned.startsWith('0')) {
+        //     cleaned = '856' + cleaned.substring(1);
+        // } else if (!cleaned.startsWith('856')) {
+        //     cleaned = '856' + cleaned;
+        // }
 
         return cleaned;
     }
