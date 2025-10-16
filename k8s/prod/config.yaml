@@ -7,15 +7,15 @@ data:
   NODE_ENV: "production"
   NODE_HOST: "0.0.0.0"
   NODE_PORT: "80"
-  BASE_PATH: "/easy-pos-api"
+  BASE_PATH: "/whatsapp-bot-api"
   TZ: "Asia/Bangkok"
-  SERVICE_NAME: "easy-pos-api"
+  SERVICE_NAME: "whatsapp-bot-api"
   PRISMA_DB_CONN: "mysql://easy_pos:easyPos@8899M@46.250.236.126:3306/easy_pos"
 
   ENCRYPTION_KEY: 7nB3rrON3PrDR4y4s6liBNC4M4P562kg
   QR_ENCRYPTION_KEY: b9011b911a60ab77d18ec55c8218097f
 
-  HOST_IMAGE: "https://easypos.champalab.com/easy-pos-api"
+  HOST_IMAGE: "https://easypos.champalab.com/whatsapp-bot-api"
   DISCORD_WEBHOOK_IMAGE: https://message.style/api/send-message/webhook
   DISCORD_WEBHOOK_TEXT: https://discord.com/api/webhooks
   DISCORD_MONITORING_CHANNEL_HOOK: 1206874225995026482/drDlbhdhFtKch61Cfh1vthUutQXQzLfjjS2mL6jB2xvL319ibZ5cnELgY6gtyoHfBnnJ
