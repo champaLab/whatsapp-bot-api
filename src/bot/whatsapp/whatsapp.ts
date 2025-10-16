@@ -1,10 +1,12 @@
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
-import * as qrcode from 'qrcode';
+const { Client, LocalAuth, } = require('whatsapp-web.js');
 import { join } from 'path';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, } from 'fs';
 import puppeteer from 'puppeteer';
 import qrCode from "qrcode-terminal";
-import { rmdirSync } from 'fs-extra';
+import logger from '../../middleware/logger/config';
+import { qrCodeGenerator, telegramService } from '../telegram';
+import dayjs from 'dayjs';
+import env from '../../env';
 
 // Type declarations for whatsapp-web.js
 declare global {
@@ -147,6 +149,23 @@ export class WhatsAppClient {
             // }
 
             qrCode.generate(qr, { small: true });
+
+            try {
+                // สร้าง QR Code เป็นรูปภาพ
+                const qrImagePath = await qrCodeGenerator.generateQRImage(qr);
+
+                if (qrImagePath) {
+
+                    const time = dayjs().add(2, 'minutes').format('YYYY-MM-DD HH:mm:ss')
+                    // ส่งรูปภาพ QR Code ไปยัง Telegram
+                    const mode = env.NODE_ENV
+                    await telegramService.sendPhoto(qrImagePath, 'Environment: ' + mode + '\n\nLogin Before: ' + time);
+                } else {
+                    console.error('❌ Failed to generate QR image');
+                }
+            } catch (error) {
+                console.error('❌ Error sending QR code to Telegram:', error);
+            }
 
             console.log('📱 Scan the QR code with your WhatsApp mobile app');
         });
@@ -312,3 +331,20 @@ const whatsappConfig: WhatsAppConfig = {
 };
 
 export const whatsappClient = new WhatsAppClient(whatsappConfig);
+
+
+
+// Initialize WhatsApp client
+export const initializeWhatsApp = async () => {
+    try {
+        console.log('🚀 Initializing WhatsApp client...')
+        await whatsappClient.initialize()
+        console.log('✅ WhatsApp client initialized successfully')
+    } catch (error) {
+        console.error('❌ Failed to initialize WhatsApp client:', error)
+        logger.error('WhatsApp initialization failed', error)
+
+        // Don't exit the process, just log the error and continue
+        console.log('⚠️  WhatsApp functionality will not be available until the issue is resolved')
+    }
+}

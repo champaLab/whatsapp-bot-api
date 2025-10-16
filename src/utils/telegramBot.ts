@@ -62,7 +62,10 @@ class TelegramBotService {
         }
 
         try {
-            const result = await this.bot.sendPhoto(chatId, photo, options)
+            // Add contentType to avoid deprecation warning
+            const result = await this.bot.sendPhoto(chatId, photo, options, {
+                contentType: 'image/png'
+            })
             logger.info(`Photo sent successfully to chat ${chatId}`)
             return result
         } catch (error) {
@@ -85,7 +88,10 @@ class TelegramBotService {
         }
 
         try {
-            const result = await this.bot.sendDocument(chatId, document, options)
+            // Add contentType to avoid deprecation warning
+            const result = await this.bot.sendDocument(chatId, document, options, {
+                contentType: 'application/octet-stream'
+            })
             logger.info(`Document sent successfully to chat ${chatId}`)
             return result
         } catch (error) {

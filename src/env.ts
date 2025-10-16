@@ -2,6 +2,11 @@ import dotenv from 'dotenv'
 
 dotenv.config({ path: '.env' })
 
+// Set environment variable to suppress Telegram bot deprecation warning
+if (process.env.NTBA_FIX_350 !== 'false') {
+    process.env.NTBA_FIX_350 = 'true';
+}
+
 export default {
     SERVICE_NAME: process.env.SERVICE_NAME,
     NODE_ENV: process.env.NODE_ENV,
@@ -25,7 +30,8 @@ export default {
     QR_ENCRYPTION_KEY: `${process.env.QR_ENCRYPTION_KEY}`,
     CONTACT_NUMBER: `${process.env.CONTACT_NUMBER}`,
     ROW_PER_PAGE: Number(`${process.env.ROW_PER_PAGE ?? 25}`),
-    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
-    TELEGRAM_CHAT_ID: Number(process.env.TELEGRAM_CHAT_ID)
+    TELEGRAM_BOT_TOKEN: `${process.env.TELEGRAM_BOT_TOKEN}`,
+    TELEGRAM_CHAT_ID: `${process.env.TELEGRAM_CHAT_ID}`,
+    NTBA_FIX_350: process.env.NTBA_FIX_350 === 'true'
 
 }

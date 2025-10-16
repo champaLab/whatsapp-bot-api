@@ -1,4 +1,4 @@
-import { whatsappClient } from '../../config/whatsapp';
+import { whatsappClient } from '../../bot/whatsapp/whatsapp';
 const { MessageMedia } = require('whatsapp-web.js');
 
 export interface SendMessageRequest {
