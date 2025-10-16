@@ -7,7 +7,7 @@ data:
   NODE_ENV: "production"
   NODE_HOST: "0.0.0.0"
   NODE_PORT: "80"
-  BASE_PATH: "/whatsapp-bot-api"
+  BASE_PATH: "/api"
   TZ: "Asia/Bangkok"
   SERVICE_NAME: "whatsapp-bot-api"
   PRISMA_DB_CONN: "mysql://easy_pos:easyPos@8899M@46.250.236.126:3306/easy_pos"
