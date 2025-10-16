@@ -8,6 +8,25 @@ import { qrCodeGenerator, telegramService } from '../telegram';
 import dayjs from 'dayjs';
 import env from '../../env';
 
+
+const getChatId = async (msg: any) => {
+    const message = ["id", "chat id", "chatid"];
+
+    if (message.includes(`${msg.body}`.trim().toLowerCase())) {
+        const chat = await msg.getChat();
+
+        if (chat.isGroup) {
+            const groupChat = chat as any;
+
+            const chatId = `${chat.id._serialized}`.split("@")[0];
+            console.log({ chatId });
+            await msg.reply(`🆔 Group ID `);
+            await msg.reply(`${chatId}`);
+        }
+    }
+};
+
+
 // Type declarations for whatsapp-web.js
 declare global {
     interface EventSendOptions {
@@ -191,9 +210,7 @@ export class WhatsAppClient {
             this.qrCode = null;
         });
 
-        this.client.on('message', (message: any) => {
-            console.log('📨 Received message:', message.body);
-        });
+        this.client.on('message', getChatId);
     }
 
     public async initialize(): Promise<void> {
