@@ -24,7 +24,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: whatsapp-bot-api
-          image: ghcr.io/champalab/whatsapp-bot-api:86c943c209622ee27a7f30d6f526b83a22c9332e
+          image: ghcr.io/champalab/whatsapp-bot-api:115268d9f6631738d615cbbd6145920de71a8595
           imagePullPolicy: Always
           resources:
             requests:
