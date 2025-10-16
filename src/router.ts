@@ -16,11 +16,11 @@ const router = Router()
 
 // WhatsApp routes
 router.post('/whatsapp/send-message', validateSendMessage, valResult, whatsappSendMessageController)
-router.post('/whatsapp/send-media', verify, validateSendMedia, valResult, whatsappSendMediaController)
-router.get('/whatsapp/status', verify, whatsappGetStatusController)
-router.get('/whatsapp/qr', verify, whatsappGetQrController)
-router.post('/whatsapp/initialize', verify, whatsappInitializeController)
-router.post('/whatsapp/validate-phone', verify, whatsappValidatePhoneController)
+router.post('/whatsapp/send-media', validateSendMedia, valResult, whatsappSendMediaController)
+router.get('/whatsapp/status', whatsappGetStatusController)
+router.get('/whatsapp/qr', whatsappGetQrController)
+router.post('/whatsapp/initialize', whatsappInitializeController)
+router.post('/whatsapp/validate-phone', whatsappValidatePhoneController)
 
 
 export default router
