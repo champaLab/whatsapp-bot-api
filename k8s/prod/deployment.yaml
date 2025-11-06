@@ -68,9 +68,9 @@ spec:
             - name: whatsapp-bot-api
               mountPath: /app/uploads
               subPath: whatsapp-bot-api/uploads
-            - name: whatsapp-bot-api
-              mountPath: /app/whatsapp-sessions
-              subPath: whatsapp-bot-api/whatsapp-sessions
+            # - name: whatsapp-bot-api
+            #   mountPath: /app/whatsapp-sessions
+            #   subPath: whatsapp-bot-api/whatsapp-sessions
       volumes:
         - name: localtime
           hostPath:
