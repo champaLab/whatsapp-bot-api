@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { whatsappService } from './service';
+import { telegramService } from '../../bot/telegram';
 
 /**
  * Send a text message via WhatsApp
@@ -14,10 +15,14 @@ export const whatsappSendMessageController = async (req: Request, res: Response)
         if (result.success) {
             return res.json({ status: 'success', message: 'Message sent successfully', data: result });
         } else {
+            const message = `❌❌ WhatsApp session error ❌❌`;
+            await telegramService.sendMessage(message);
             return res.status(400).json({ status: 'error', message: result.message, data: null });
         }
     } catch (error) {
         console.error('Send message controller error:', error);
+        const message = `❌❌ WhatsApp session error ❌❌`;
+        await telegramService.sendMessage(message);
         return res.status(500).json({ status: 'error', message: 'Internal server error', data: null });
     }
 };
