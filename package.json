@@ -62,7 +62,7 @@
         "@types/fs-extra": "^11.0.4",
         "@types/jsonwebtoken": "^9.0.10",
         "@types/multer": "^2.0.0",
-        "@types/node": "^24.5.2",
+        "@types/node": "^24.9.1",
         "@types/node-cron": "^3.0.11",
         "@types/node-fetch": "^2.6.13",
         "@types/request-ip": "^0.0.41",
