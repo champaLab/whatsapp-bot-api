@@ -215,8 +215,6 @@ export class WhatsAppClient {
 
     public async initialize(): Promise<void> {
         try {
-            console.log('🚀 Initializing WhatsApp client...');
-
             // Clean up any existing session locks
             await this.cleanupBrowserProcesses();
 
@@ -235,7 +233,6 @@ export class WhatsAppClient {
                         await this.cleanupBrowserProcesses();
                         await new Promise(resolve => setTimeout(resolve, 3000));
                         await this.client.initialize();
-                        console.log('✅ WhatsApp client initialized successfully on retry');
                         return;
                     } catch (retryError) {
                         console.error('❌ Retry failed:', retryError);
@@ -247,7 +244,6 @@ export class WhatsAppClient {
                         await this.cleanupBrowserProcesses();
                         await new Promise(resolve => setTimeout(resolve, 5000));
                         await this.client.initialize();
-                        console.log('✅ WhatsApp client initialized successfully after browser crash recovery');
                         return;
                     } catch (retryError) {
                         console.error('❌ Browser crash recovery failed:', retryError);
@@ -354,9 +350,7 @@ export const whatsappClient = new WhatsAppClient(whatsappConfig);
 // Initialize WhatsApp client
 export const initializeWhatsApp = async () => {
     try {
-        console.log('🚀 Initializing WhatsApp client...')
         await whatsappClient.initialize()
-        console.log('✅ WhatsApp client initialized successfully')
     } catch (error) {
         console.error('❌ Failed to initialize WhatsApp client:', error)
         logger.error('WhatsApp initialization failed', error)
